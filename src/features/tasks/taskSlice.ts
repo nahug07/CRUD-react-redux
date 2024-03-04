@@ -1,41 +1,39 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export const taskSlice = createSlice({
+  name: "tasks",
+  initialState: [
+    {
+      id: 1,
+      title: "test",
+      description: "description test",
+    },
+  ],
+  reducers: {
+    addTaks: (state, action) => {
+      state.push(action.payload);
+    },
 
-export const taskSlice = createSlice ({
-    name: 'tasks',
-    initialState: [
-        {
-            id: 1,
-            title: 'tarea 1',
-            description: 'description de tarea 1'
-        }
-    ],
-    reducers: {
+    deleteTask: (state, action) => {
+      const taskFound = state.find((task) => task.id === action.payload);
+      if (taskFound) {
+        state.splice(state.indexOf(taskFound), 1);
+      }
+    },
 
-        addTaks: (state, action) => {
-            state.push(action.payload)
-        },
+    editTask: (state, action) => {
+      const { id, title, description } = action.payload;
 
-        deleteTask: (state, action) => {
-            const taskFound = state.find(task => task.id === action.payload)
-            if(taskFound){
-                state.splice(state.indexOf(taskFound), 1)
-            }
-        },
+      const foundTask = state.find((task) => task.id === id);
 
-        editTask: (state, action) => {
-            const {id, title, description} = action.payload
+      if (foundTask) {
+        foundTask.title = title;
+        foundTask.description = description;
+      }
+    },
+  },
+});
 
-            const foundTask = state.find(task => task.id === id)
+export const { addTaks, deleteTask, editTask } = taskSlice.actions;
 
-            if(foundTask){
-                foundTask.title = title
-                foundTask.description = description
-            }
-        }
-    }
-})
-
-export const {addTaks, deleteTask, editTask} = taskSlice.actions
-
-export default taskSlice.reducer
+export default taskSlice.reducer;
